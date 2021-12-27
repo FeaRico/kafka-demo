@@ -11,6 +11,11 @@ public class Consumer {
 
     private final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
+    @KafkaListener(topics = "${kafka.message.topic.name}", containerFactory = "messageKafkaListenerContainerFactory")
+    public void messageListener(String message){
+        logger.info("Consume message: " + message);
+    }
+
     @KafkaListener(topics = "${kafka.ship.topic.name}", containerFactory = "shipKafkaListenerContainerFactory")
     public void shipListener(Ship ship){
         logger.info("Consume ship message: " + ship);

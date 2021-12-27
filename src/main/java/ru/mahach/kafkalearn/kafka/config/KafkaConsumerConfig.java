@@ -10,6 +10,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import ru.mahach.kafkalearn.dto.Ship;
+import ru.mahach.kafkalearn.kafka.engine.Consumer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +21,10 @@ public class KafkaConsumerConfig {
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
-    public ConsumerFactory<String, String> consumerFactory(String groupId){
+    public ConsumerFactory<String, String> messageConsumerFactory(){
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "port");
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, "20971520");
@@ -31,9 +32,10 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
-    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(String groupId){
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> messageKafkaListenerContainerFactory(){
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory(groupId));
+        factory.setConsumerFactory(messageConsumerFactory());
         return factory;
     }
 

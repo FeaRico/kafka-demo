@@ -35,7 +35,7 @@ public class Producer {
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             @Override
             public void onSuccess(SendResult<String, String> result) {
-                logger.info("Sent message=[" + message + "]");
+                logger.info("Sent message successful");
             }
 
             @Override
@@ -45,13 +45,13 @@ public class Producer {
         });
     }
 
-    public void sendShipMessage(Ship ship){
+    public void sendShip(Ship ship){
         ListenableFuture<SendResult<String, Ship>> future = shipKafkaTemplate.send(shipTopic, ship);
 
         future.addCallback(new ListenableFutureCallback<SendResult<String, Ship>>() {
             @Override
             public void onSuccess(SendResult<String, Ship> result) {
-                logger.info("Sent ship=[" + ship.toString() + "]");
+                logger.info("Sent ship successful");
             }
 
             @Override
